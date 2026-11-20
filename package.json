@@ -1,0 +1,31 @@
+{
+  "name": "spray",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@bitauth/libauth": "^3.1.0-next.8",
+    "@electrum-cash/network": "^4.4.8",
+    "@electrum-cash/web-socket": "^4.2.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.0",
+    "@fontsource-variable/dm-sans": "^5.2.0",
+    "@wizardconnect/core": "^0.2.11",
+    "@wizardconnect/dapp": "^0.2.8",
+    "@wizardconnect/react": "^0.2.7",
+    "qrcode-generator": "^2.0.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
