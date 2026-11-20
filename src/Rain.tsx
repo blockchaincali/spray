@@ -10,7 +10,7 @@ interface Note {
   sway: number;
   tier: number;
   tierIndex: number;
-  symbol: string;
+  currency: string;
 }
 
 interface Shout {
@@ -70,7 +70,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
       sway: Math.random() * 160 - 80,
       tier,
       tierIndex,
-      symbol: c.symbol,
+      currency: c.code,
     }));
     setNotes((n) => [...n, ...batch].slice(-220));
     const shout = { id: nextId++, name, amount, currency };
@@ -100,7 +100,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
             } as React.CSSProperties
           }
         >
-          <span className="note-amt">{n.symbol}{n.tier.toLocaleString("en-US")}</span>
+          <span className="note-amt">{formatFiat(n.tier, n.currency)}</span>
           <span className="note-mark">BCH</span>
         </div>
       ))}

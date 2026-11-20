@@ -12,7 +12,7 @@ People have always showered the ones they celebrate: the money dance at a weddin
 
 1. Open the app and click **Open the big screen** (the demo party) on your laptop.
 2. On your phone, click **Spray at the demo party** (or scan the QR on the big screen).
-3. Type your name, tap **$1**, connect a WizardConnect wallet (Paytaca, Cashonize or Selene) and approve.
+3. Type your name, tap **$0.10**, connect a WizardConnect wallet (Paytaca, Cashonize or Selene) and approve.
 4. Watch the notes rain on the big screen with your name, and your spray appear on the leaderboard.
 
 Every spray is a real BCH mainnet transaction; the network fee is a fraction of a cent.

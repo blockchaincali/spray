@@ -8,13 +8,13 @@ export interface Currency {
 
 export const CURRENCIES: Currency[] = [
   { code: "NGN", name: "Nigerian naira", symbol: "₦", tiers: [100, 200, 500, 1000, 2000, 5000] },
-  { code: "USD", name: "US dollar", symbol: "$", tiers: [1, 2, 5, 10, 20, 50] },
-  { code: "EUR", name: "Euro", symbol: "€", tiers: [1, 2, 5, 10, 20, 50] },
-  { code: "GBP", name: "British pound", symbol: "£", tiers: [1, 2, 5, 10, 20, 50] },
+  { code: "USD", name: "US dollar", symbol: "$", tiers: [0.1, 0.5, 1, 5, 10, 20] },
+  { code: "EUR", name: "Euro", symbol: "€", tiers: [0.1, 0.5, 1, 5, 10, 20] },
+  { code: "GBP", name: "British pound", symbol: "£", tiers: [0.1, 0.5, 1, 5, 10, 20] },
   { code: "KES", name: "Kenyan shilling", symbol: "KSh", tiers: [50, 100, 200, 500, 1000, 2000] },
   { code: "GHS", name: "Ghanaian cedi", symbol: "GH₵", tiers: [5, 10, 20, 50, 100, 200] },
   { code: "ZAR", name: "South African rand", symbol: "R", tiers: [10, 20, 50, 100, 200, 500] },
-  { code: "CAD", name: "Canadian dollar", symbol: "C$", tiers: [1, 2, 5, 10, 20, 50] },
+  { code: "CAD", name: "Canadian dollar", symbol: "C$", tiers: [0.1, 0.5, 1, 5, 10, 20] },
 ];
 
 export const currencyOf = (code: string | undefined) =>
@@ -22,8 +22,11 @@ export const currencyOf = (code: string | undefined) =>
 
 export function formatFiat(amount: number, code: string) {
   const c = currencyOf(code);
-  const rounded = amount >= 100 || Number.isInteger(amount) ? Math.round(amount) : Math.round(amount * 100) / 100;
-  return `${c.symbol}${rounded.toLocaleString("en-US")}`;
+  const whole = amount >= 100 || Number.isInteger(amount);
+  const text = whole
+    ? Math.round(amount).toLocaleString("en-US")
+    : amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `${c.symbol}${text}`;
 }
 
 /** Best guess at the visitor's currency from their browser locale. */
