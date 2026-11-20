@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
-import { formatNgn } from "./chain";
+import { currencyOf, formatFiat } from "./currency";
 
 interface Note {
   id: number;
@@ -9,20 +9,21 @@ interface Note {
   rotate: number;
   sway: number;
   tier: number;
+  tierIndex: number;
+  symbol: string;
 }
 
 interface Shout {
   id: number;
   name: string;
-  ngn: number;
+  amount: number;
+  currency: string;
 }
 
 export interface RainHandle {
-  spray: (name: string, ngn: number) => void;
+  spray: (name: string, amount: number, currency: string) => void;
 }
 
-const TIERS = [100, 200, 500, 1000, 2000, 5000];
-const tierOf = (ngn: number) => [...TIERS].reverse().find((t) => ngn >= t) ?? 100;
 
 let audio: AudioContext | null = null;
 export function enableSound() {
@@ -54,9 +55,12 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
   const [shouts, setShouts] = useState<Shout[]>([]);
   const timers = useRef<number[]>([]);
 
-  const spray = useCallback((name: string, ngn: number) => {
-    const tier = tierOf(ngn);
-    const count = Math.min(44, 3 + Math.round(Math.sqrt(Math.max(ngn, 100)) / 2));
+  const spray = useCallback((name: string, amount: number, currency: string) => {
+    const c = currencyOf(currency);
+    let tierIndex = 0;
+    c.tiers.forEach((t, i) => { if (amount >= t) tierIndex = i; });
+    const tier = c.tiers[tierIndex];
+    const count = Math.min(44, 6 + tierIndex * 6);
     const batch: Note[] = Array.from({ length: count }, () => ({
       id: nextId++,
       left: Math.random() * 96,
@@ -65,9 +69,11 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
       rotate: Math.random() * 720 - 360,
       sway: Math.random() * 160 - 80,
       tier,
+      tierIndex,
+      symbol: c.symbol,
     }));
     setNotes((n) => [...n, ...batch].slice(-220));
-    const shout = { id: nextId++, name, ngn };
+    const shout = { id: nextId++, name, amount, currency };
     setShouts((s) => [...s, shout].slice(-3));
     chaChing();
     timers.current.push(
@@ -83,7 +89,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
       {notes.map((n) => (
         <div
           key={n.id}
-          className={`note t${n.tier}`}
+          className={`note t${n.tierIndex}`}
           style={
             {
               left: `${n.left}%`,
@@ -94,7 +100,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
             } as React.CSSProperties
           }
         >
-          <span className="note-amt">₦{n.tier}</span>
+          <span className="note-amt">{n.symbol}{n.tier.toLocaleString("en-US")}</span>
           <span className="note-mark">BCH</span>
         </div>
       ))}
@@ -102,7 +108,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
         <div className="shouts">
           {shouts.map((s) => (
             <div key={s.id} className="shout">
-              <b>{s.name}</b> sprayed <b>{formatNgn(s.ngn)}</b>
+              <b>{s.name}</b> sprayed <b>{formatFiat(s.amount, s.currency)}</b>
             </div>
           ))}
         </div>

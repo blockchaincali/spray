@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Banner } from "./Banner";
+import { Footer, Nav } from "./Chrome";
 import { ConnectDialog } from "./ConnectDialog";
 import { Guest } from "./Guest";
 import { Home } from "./Home";
@@ -22,14 +23,6 @@ function useHash() {
   return hash;
 }
 
-function Logo() {
-  return (
-    <a className="logo" href="#/">
-      <span className="logo-mark">₦</span>Spray
-    </a>
-  );
-}
-
 export default function App() {
   const hash = useHash();
   const wallet = useWallet();
@@ -48,13 +41,9 @@ export default function App() {
   return (
     <div className={`app page-${kind ?? "home"}`}>
       <Banner />
-      {kind !== "s" && (
-        <nav className="nav">
-          <Logo />
-          <a className="btn ghost small" href="#/new">Start a party</a>
-        </nav>
-      )}
+      {kind !== "s" && <Nav />}
       {page}
+      {kind !== "s" && <Footer />}
       <ConnectDialog wallet={wallet} />
     </div>
   );

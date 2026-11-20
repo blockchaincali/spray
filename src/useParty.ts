@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { bchPrice, findSprays, watchAddress, type Price, type Spray } from "./chain";
+import { bchPrice, findSprays, watchAddress, type Spray } from "./chain";
 import type { Session } from "./session";
 
 export interface Sprayer {
   name: string;
-  ngn: number;
+  amount: number;
   sats: number;
   count: number;
 }
@@ -13,7 +13,7 @@ export interface Sprayer {
 export function useParty(session: Session, onNewSpray?: (s: Spray) => void) {
   const [sprays, setSprays] = useState<Spray[]>([]);
   const [status, setStatus] = useState<"loading" | "live" | "offline">("loading");
-  const [price, setPrice] = useState<Price | null>(null);
+  const [price, setPrice] = useState<number | null>(null);
   const seen = useRef<Set<string> | null>(null);
   const cb = useRef(onNewSpray);
   cb.current = onNewSpray;
@@ -52,32 +52,32 @@ export function useParty(session: Session, onNewSpray?: (s: Spray) => void) {
   }, [session.address, session.id]);
 
   useEffect(() => {
-    const load = () => bchPrice().then(setPrice).catch(() => {});
+    const load = () => bchPrice(session.currency).then(setPrice).catch(() => {});
     load();
     const t = window.setInterval(load, 120_000);
     return () => clearInterval(t);
-  }, []);
+  }, [session.currency]);
 
   const leaderboard = useMemo(() => {
     const byName = new Map<string, Sprayer>();
     for (const s of sprays) {
       const key = s.name.trim().toLowerCase();
-      const row = byName.get(key) ?? { name: s.name.trim(), ngn: 0, sats: 0, count: 0 };
-      row.ngn += s.ngn;
+      const row = byName.get(key) ?? { name: s.name.trim(), amount: 0, sats: 0, count: 0 };
+      row.amount += s.currency === session.currency ? s.amount : 0;
       row.sats += s.sats;
       row.count += 1;
       byName.set(key, row);
     }
     return [...byName.values()].sort((a, b) => b.sats - a.sats);
-  }, [sprays]);
+  }, [sprays, session.currency]);
 
   const totals = useMemo(
     () => ({
-      ngn: sprays.reduce((t, s) => t + s.ngn, 0),
+      amount: sprays.reduce((t, s) => t + (s.currency === session.currency ? s.amount : 0), 0),
       sats: sprays.reduce((t, s) => t + s.sats, 0),
       count: sprays.length,
     }),
-    [sprays],
+    [sprays, session.currency],
   );
 
   const recent = useMemo(

@@ -84,14 +84,15 @@ export function lockingBytecode(address: string) {
   return decoded.bytecode;
 }
 
-/** OP_RETURN "spray" <sessionId> <name> <naira>: who sprayed, at which party, how much. */
-export function memoBytecode(sessionId: string, name: string, ngn: number) {
+/** OP_RETURN "spray" <partyId> <name> <amount> <currency>: who sprayed, at which party, how much. */
+export function memoBytecode(sessionId: string, name: string, amount: number, currency: string) {
   return flattenBinArray([
     Uint8Array.of(0x6a),
     encodeDataPush(utf8ToBin(MEMO_TAG)),
     encodeDataPush(utf8ToBin(sessionId)),
     encodeDataPush(utf8ToBin(name.slice(0, 40))),
-    encodeDataPush(utf8ToBin(String(ngn))),
+    encodeDataPush(utf8ToBin(String(amount))),
+    encodeDataPush(utf8ToBin(currency)),
   ]);
 }
 
@@ -102,7 +103,7 @@ function parseMemo(hex: string) {
       "data" in ins ? binToUtf8(ins.data) : null,
     );
     if (pushes[0] !== MEMO_TAG || !pushes[1] || pushes[2] == null) return null;
-    return { sessionId: pushes[1], name: pushes[2], ngn: Number(pushes[3]) || 0 };
+    return { sessionId: pushes[1], name: pushes[2], amount: Number(pushes[3]) || 0, currency: pushes[4] || "NGN" };
   } catch {
     return null;
   }
@@ -111,7 +112,8 @@ function parseMemo(hex: string) {
 export interface Spray {
   txid: string;
   name: string;
-  ngn: number;
+  amount: number;
+  currency: string;
   sats: number;
   height: number;
 }
@@ -129,7 +131,7 @@ export async function findSprays(address: string, sessionId: string): Promise<Sp
     const sats = tx.vout
       .filter((o) => o.scriptPubKey.hex === targetHex)
       .reduce((sum, o) => sum + Math.round(o.value * SATS_PER_BCH), 0);
-    if (sats > 0) sprays.push({ txid: tx.txid, name: memo.name, ngn: memo.ngn, sats, height: history[i].height });
+    if (sats > 0) sprays.push({ txid: tx.txid, name: memo.name, amount: memo.amount, currency: memo.currency, sats, height: history[i].height });
   });
   return sprays;
 }
@@ -147,31 +149,26 @@ export async function watchAddress(address: string, onChange: () => void) {
   };
 }
 
-export interface Price {
-  ngn: number;
-  usd: number;
-}
+const priceCache = new Map<string, { price: number; at: number }>();
 
-let priceCache: { price: Price; at: number } | null = null;
-
-/** BCH price in naira and dollars, with a second source as fallback. */
-export async function bchPrice(): Promise<Price> {
-  if (priceCache && Date.now() - priceCache.at < 120_000) return priceCache.price;
-  let price: Price;
+/** Price of 1 BCH in the given fiat currency, with a second source as fallback. */
+export async function bchPrice(currency: string): Promise<number> {
+  const code = currency.toLowerCase();
+  const cached = priceCache.get(code);
+  if (cached && Date.now() - cached.at < 120_000) return cached.price;
+  let price = 0;
   try {
-    const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin-cash&vs_currencies=ngn,usd");
-    const j = (await r.json())["bitcoin-cash"];
-    price = { ngn: Number(j.ngn), usd: Number(j.usd) };
-    if (!price.ngn) throw new Error("no price");
-  } catch {
+    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin-cash&vs_currencies=${code}`);
+    price = Number((await r.json())["bitcoin-cash"]?.[code]);
+  } catch {}
+  if (!price) {
     const r = await fetch("https://api.coinbase.com/v2/exchange-rates?currency=BCH");
-    const rates = (await r.json()).data.rates;
-    price = { ngn: Number(rates.NGN), usd: Number(rates.USD) };
+    price = Number((await r.json()).data.rates[currency.toUpperCase()]);
   }
-  priceCache = { price, at: Date.now() };
+  if (!price) throw new Error("No price available");
+  priceCache.set(code, { price, at: Date.now() });
   return price;
 }
 
-export const ngnToSats = (ngn: number, price: Price) => Math.round((ngn / price.ngn) * SATS_PER_BCH);
+export const fiatToSats = (amount: number, price: number) => Math.round((amount / price) * SATS_PER_BCH);
 export const satsToBch = (sats: number) => (sats / SATS_PER_BCH).toFixed(sats < 1e6 ? 6 : 4);
-export const formatNgn = (n: number) => `₦${Math.round(n).toLocaleString("en-NG")}`;

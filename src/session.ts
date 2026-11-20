@@ -6,6 +6,7 @@ export interface Session {
   title: string;
   celebrant: string;
   address: string;
+  currency: string;
 }
 
 const toB64Url = (s: string) =>
@@ -20,15 +21,15 @@ const fromB64Url = (s: string) => {
 };
 
 export function encodeSession(s: Session) {
-  return toB64Url(JSON.stringify([s.id, s.title, s.celebrant, s.address.replace(/^bitcoincash:/, "")]));
+  return toB64Url(JSON.stringify([s.id, s.title, s.celebrant, s.address.replace(/^bitcoincash:/, ""), s.currency]));
 }
 
 export function decodeSession(token: string): Session | null {
   try {
-    const [id, title, celebrant, addr] = JSON.parse(fromB64Url(token));
+    const [id, title, celebrant, addr, currency] = JSON.parse(fromB64Url(token));
     const address = `bitcoincash:${addr}`;
     if (typeof id !== "string" || !isValidAddress(address)) return null;
-    return { id, title: String(title), celebrant: String(celebrant), address };
+    return { id, title: String(title), celebrant: String(celebrant), address, currency: typeof currency === "string" ? currency : "NGN" };
   } catch {
     return null;
   }

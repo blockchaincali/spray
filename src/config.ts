@@ -12,15 +12,13 @@ export const PROJECT = {
 export const TREASURY = "bitcoincash:qqjc40pdyklz6hwf8zvf97zceqz6w6h8m5v75wqjsf";
 export const FEE_BPS = 100;
 
-/** Naira amounts a guest can spray with one tap. */
-export const AMOUNTS_NGN = [100, 200, 500, 1000, 2000, 5000];
-
 /** A standing party anyone (including the judges) can spray at. */
 export const DEMO_SESSION: Session = {
   id: "blaze26",
   title: "BLAZE 2026 Demo Owambe",
   celebrant: "Caleb",
   address: "bitcoincash:qqjc40pdyklz6hwf8zvf97zceqz6w6h8m5v75wqjsf",
+  currency: "NGN",
 };
 
 export const EXPLORER_TX = "https://blockchair.com/bitcoin-cash/transaction/";

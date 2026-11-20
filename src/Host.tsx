@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CURRENCIES, guessCurrency } from "./currency";
 import { Qr } from "./Qr";
 import {
   guestUrl,
@@ -16,6 +17,7 @@ export function Host({ wallet }: { wallet: Wallet }) {
   const [title, setTitle] = useState("");
   const [celebrant, setCelebrant] = useState("");
   const [address, setAddress] = useState("");
+  const [currency, setCurrency] = useState(guessCurrency);
   const [session, setSession] = useState<Session | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -38,6 +40,7 @@ export function Host({ wallet }: { wallet: Wallet }) {
       title: title.trim() || `${celebrant.trim()}'s party`,
       celebrant: celebrant.trim(),
       address: normalizeAddress(address),
+      currency,
     });
   };
 
@@ -89,14 +92,26 @@ export function Host({ wallet }: { wallet: Wallet }) {
     <main className="host">
       <p className="eyebrow">Start a spray party</p>
       <h1>Who are we spraying?</h1>
+      <p className="lede">A wedding, a birthday, a live stream, a gig: anyone you want to make it rain on.</p>
       <form className="form" onSubmit={create}>
         <label>
           Celebrant's name
-          <input value={celebrant} onChange={(e) => setCelebrant(e.target.value)} placeholder="Ada & Tunde" maxLength={40} required />
+          <input value={celebrant} onChange={(e) => setCelebrant(e.target.value)} placeholder="Ada & Tunde, or your stream name" maxLength={40} required />
         </label>
         <label>
-          Party name <span className="opt">(optional)</span>
+          <span>Party name <span className="opt">(optional)</span></span>
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ada weds Tunde 💍" maxLength={50} />
+        </label>
+        <label>
+          Spray currency
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+            {CURRENCIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.symbol} {c.name} ({c.code})
+              </option>
+            ))}
+          </select>
+          <span className="field-note">Guests tap amounts in this currency; it's paid in BCH at the live rate.</span>
         </label>
         <label>
           Celebrant's BCH address

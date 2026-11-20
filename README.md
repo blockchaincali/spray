@@ -1,6 +1,6 @@
 # Spray: digital money spraying on Bitcoin Cash
 
-**Live app:** https://spray-bch.vercel.app (update after deploy) · **Built for BCH BLAZE 2026**
+**Live app:** https://spray-bch.vercel.app · **Built for BCH BLAZE 2026**
 
 Spraying money on the celebrant is the heartbeat of a Nigerian party. It's also now a criminal offence: Section 21 of the CBN Act makes spraying naira notes punishable by at least six months in prison or a ₦50,000 fine, and the EFCC has been prosecuting it at weddings and parties since 2024.
 
@@ -17,6 +17,7 @@ Every spray is a real BCH mainnet transaction. ₦100 costs a few US cents.
 
 ## Features
 
+- **Any currency:** parties can be priced in NGN, USD, EUR, GBP, KES, GHS, ZAR or CAD; guests pay in BCH at the live rate.
 - **Host setup:** celebrant name + BCH address (or "Use my wallet" via WizardConnect) → a party link. No sign-up, no server, no database: the party lives in the URL.
 - **Guest spray page (mobile):** one-tap amounts from ₦100 to ₦5,000, priced live in BCH; WizardConnect pairing persists, so repeat sprays are one tap + approve.
 - **Big screen:** QR to spray, live naira total, falling notes, name shout-outs, top-sprayers leaderboard, live feed with explorer links, optional sound.
@@ -29,7 +30,7 @@ Each spray is one transaction built in the browser and signed in the guest's wal
 | Output | Purpose |
 |---|---|
 | celebrant address | the spray itself |
-| `OP_RETURN "spray" <partyId> <name> <naira>` | who sprayed, at which party, how much |
+| `OP_RETURN "spray" <partyId> <name> <amount> <currency>` | who sprayed, at which party, how much |
 | Spray treasury (1%) | platform fee, only when it clears the 546-sat dust limit |
 | change | back to the guest's wallet |
 

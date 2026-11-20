@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { bchPrice, formatNgn, ngnToSats, satsToBch, type Price } from "./chain";
-import { AMOUNTS_NGN, EXPLORER_TX } from "./config";
+import { bchPrice, fiatToSats, satsToBch } from "./chain";
+import { EXPLORER_TX } from "./config";
+import { currencyOf, formatFiat } from "./currency";
 import { Rain, type RainHandle } from "./Rain";
 import { screenUrl, type Session } from "./session";
 import type { Wallet } from "./useWallet";
@@ -17,14 +18,15 @@ const NAME_KEY = "spray:name";
 
 export function Guest({ session, wallet }: { session: Session; wallet: Wallet }) {
   const [name, setName] = useState(() => localStorage.getItem(NAME_KEY) ?? "");
-  const [price, setPrice] = useState<Price | null>(null);
+  const [price, setPrice] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [count, setCount] = useState(0);
   const rain = useRef<RainHandle>(null);
+  const fmt = (n: number) => formatFiat(n, session.currency);
 
   useEffect(() => {
-    bchPrice().then(setPrice).catch(() => setStatus({ kind: "error", message: "Couldn't load the BCH price. Check your connection and refresh." }));
-  }, []);
+    bchPrice(session.currency).then(setPrice).catch(() => setStatus({ kind: "error", message: "Couldn't load the BCH price. Check your connection and refresh." }));
+  }, [session.currency]);
 
   useEffect(() => {
     try {
@@ -41,7 +43,7 @@ export function Guest({ session, wallet }: { session: Session; wallet: Wallet })
       setStatus({ kind: "error", message: "Add your name first so the screen can shout you out." });
       return;
     }
-    const sats = ngnToSats(ngn, price);
+    const sats = fiatToSats(ngn, price);
     if (sats < DUST) {
       setStatus({ kind: "error", message: "That amount is too small to send on-chain." });
       return;
@@ -57,14 +59,15 @@ export function Guest({ session, wallet }: { session: Session; wallet: Wallet })
       const { txid } = await spray(wallet.manager, {
         to: session.address,
         sats,
-        ngn,
+        amount: ngn,
+        currency: session.currency,
         name: who,
         sessionId: session.id,
-        prompt: `Spray ${formatNgn(ngn)} on ${session.celebrant} at ${session.title}`,
+        prompt: `Spray ${fmt(ngn)} on ${session.celebrant} at ${session.title}`,
       });
       setStatus({ kind: "done", ngn, txid });
       setCount((c) => c + 1);
-      rain.current?.spray(who, ngn);
+      rain.current?.spray(who, ngn, session.currency);
       wallet.refreshBalance();
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
@@ -88,20 +91,20 @@ export function Guest({ session, wallet }: { session: Session; wallet: Wallet })
       </label>
 
       <div className="amounts">
-        {AMOUNTS_NGN.map((ngn) => (
+        {currencyOf(session.currency).tiers.map((ngn) => (
           <button key={ngn} className="amount" disabled={!price || busy} onClick={() => doSpray(ngn)}>
-            <span className="amount-ngn">{formatNgn(ngn)}</span>
-            <span className="amount-bch">{price ? `${satsToBch(ngnToSats(ngn, price))} BCH` : "…"}</span>
+            <span className="amount-ngn">{fmt(ngn)}</span>
+            <span className="amount-bch">{price ? `${satsToBch(fiatToSats(ngn, price))} BCH` : "…"}</span>
           </button>
         ))}
       </div>
 
       <div className="guest-status" aria-live="polite">
-        {status.kind === "connecting" && <p>Connect your wallet to spray {formatNgn(status.ngn)}…</p>}
-        {status.kind === "signing" && <p className="pulse">Approve the {formatNgn(status.ngn)} spray in your wallet…</p>}
+        {status.kind === "connecting" && <p>Connect your wallet to spray {fmt(status.ngn)}…</p>}
+        {status.kind === "signing" && <p className="pulse">Approve the {fmt(status.ngn)} spray in your wallet…</p>}
         {status.kind === "done" && (
           <div className="success">
-            <p className="success-big">You sprayed {formatNgn(status.ngn)} 🎉</p>
+            <p className="success-big">You sprayed {fmt(status.ngn)} 🎉</p>
             <p>
               It's raining on the big screen now. <a href={EXPLORER_TX + status.txid} target="_blank" rel="noreferrer">See the transaction</a>
             </p>
@@ -115,7 +118,7 @@ export function Guest({ session, wallet }: { session: Session; wallet: Wallet })
         {wallet.ready ? (
           <p>
             Wallet connected{wallet.walletName ? ` (${wallet.walletName})` : ""}
-            {wallet.balance != null && price && <> · balance {formatNgn((wallet.balance / 1e8) * price.ngn)}</>} ·{" "}
+            {wallet.balance != null && price && <> · balance {fmt((wallet.balance / 1e8) * price)}</>} ·{" "}
             <button className="btn link" onClick={() => wallet.disconnect()}>Disconnect</button>
           </p>
         ) : (

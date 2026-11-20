@@ -84,11 +84,11 @@ export const platformFee = (sats: number) => {
 
 export async function spray(
   manager: DappConnectionManager,
-  options: { to: string; sats: number; sessionId: string; name: string; ngn: number; prompt: string },
+  options: { to: string; sats: number; sessionId: string; name: string; amount: number; currency: string; prompt: string },
 ) {
   if (options.sats < DUST) throw new Error("That amount is too small to send on-chain");
   const { coins, change } = await scanWallet(manager);
-  const memo = memoBytecode(options.sessionId, options.name, options.ngn);
+  const memo = memoBytecode(options.sessionId, options.name, options.amount, options.currency);
   const fee = platformFee(options.sats);
 
   const selected: Coin[] = [];

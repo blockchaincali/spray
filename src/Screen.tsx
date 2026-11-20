@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import { formatNgn, satsToBch } from "./chain";
+import { satsToBch } from "./chain";
+import { currencyOf, formatFiat } from "./currency";
 import { EXPLORER_TX } from "./config";
 import { Qr } from "./Qr";
 import { enableSound, Rain, type RainHandle } from "./Rain";
@@ -10,7 +11,7 @@ import { useParty } from "./useParty";
 export function Screen({ session }: { session: Session }) {
   const rain = useRef<RainHandle>(null);
   const [sound, setSound] = useState(false);
-  const party = useParty(session, (s) => rain.current?.spray(s.name, s.ngn));
+  const party = useParty(session, (s) => rain.current?.spray(s.name, s.amount, s.currency));
   const url = guestUrl(session);
 
   return (
@@ -20,7 +21,7 @@ export function Screen({ session }: { session: Session }) {
         <p className="eyebrow">{session.title}</p>
         <h1 className="celebrant">Spray {session.celebrant}!</h1>
         <div className="total">
-          <span className="total-ngn">{formatNgn(party.totals.ngn)}</span>
+          <span className="total-ngn">{formatFiat(party.totals.amount, session.currency)}</span>
           <span className="total-sub">
             {party.totals.count} {party.totals.count === 1 ? "spray" : "sprays"} · {satsToBch(party.totals.sats)} BCH
           </span>
@@ -31,7 +32,7 @@ export function Screen({ session }: { session: Session }) {
           )}
           {party.recent.map((s) => (
             <a key={s.txid} className="feed-row" href={EXPLORER_TX + s.txid} target="_blank" rel="noreferrer">
-              <b>{s.name}</b> sprayed <b>{formatNgn(s.ngn)}</b>
+              <b>{s.name}</b> sprayed <b>{formatFiat(s.amount, s.currency)}</b>
               <span className={s.height > 0 ? "conf" : "conf pending"}>{s.height > 0 ? "confirmed" : "instant"}</span>
             </a>
           ))}
@@ -52,7 +53,7 @@ export function Screen({ session }: { session: Session }) {
               <li key={r.name}>
                 <span className="rank">{["👑", "2", "3", "4", "5"][i]}</span>
                 <span className="who">{r.name}</span>
-                <span className="amt">{formatNgn(r.ngn)}</span>
+                <span className="amt">{formatFiat(r.amount, session.currency)}</span>
               </li>
             ))}
           </ol>
@@ -62,7 +63,7 @@ export function Screen({ session }: { session: Session }) {
           {!sound && (
             <button className="btn link" onClick={() => { enableSound(); setSound(true); }}>🔊 Sound on</button>
           )}
-          <button className="btn link" onClick={() => rain.current?.spray("Test", 500)}>Test rain</button>
+          <button className="btn link" onClick={() => rain.current?.spray("Test", currencyOf(session.currency).tiers[2], session.currency)}>Test rain</button>
         </div>
       </aside>
     </main>
