@@ -96,11 +96,11 @@ export function Host({ wallet }: { wallet: Wallet }) {
       <form className="form" onSubmit={create}>
         <label>
           Celebrant's name
-          <input value={celebrant} onChange={(e) => setCelebrant(e.target.value)} placeholder="Ada & Tunde, or your stream name" maxLength={40} required />
+          <input value={celebrant} onChange={(e) => setCelebrant(e.target.value)} placeholder="Maya & Leo, or your stream name" maxLength={40} required />
         </label>
         <label>
           <span>Party name <span className="opt">(optional)</span></span>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ada weds Tunde 💍" maxLength={50} />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Maya &amp; Leo’s wedding 💍" maxLength={50} />
         </label>
         <label>
           Spray currency

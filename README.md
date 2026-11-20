@@ -1,25 +1,27 @@
-# Spray: digital money spraying on Bitcoin Cash
+# Spray: make it rain, on-chain
 
 **Live app:** https://spray-bch.vercel.app · **Built for BCH BLAZE 2026**
 
-Spraying money on the celebrant is the heartbeat of a Nigerian party. It's also now a criminal offence: Section 21 of the CBN Act makes spraying naira notes punishable by at least six months in prison or a ₦50,000 fine, and the EFCC has been prosecuting it at weddings and parties since 2024.
+**Spray lets a whole crowd shower someone with money, live.** Guests scan one QR code, tap an amount in the party's currency, and notes rain across the big screen while the money lands in the celebrant's Bitcoin Cash wallet within seconds.
 
-**Spray moves the ritual on-chain.** Guests scan one QR code, tap ₦500, and the money rains across the big screen while the celebrant receives it instantly in their own wallet.
+People have always showered the ones they celebrate: the money dance at a wedding, coins in a busker's case, tips on a live stream. Spray takes that moment on-chain, in eight currencies (NGN, USD, EUR, GBP, KES, GHS, ZAR, CAD).
+
+**Spotlight, Nigeria:** spraying cash at parties is now a crime there. Section 21 of the CBN Act makes spraying naira notes punishable by at least six months in prison or a ₦50,000 fine, and the EFCC has prosecuted it at weddings since 2024. Spray keeps the tradition and takes the cash off the floor.
 
 ## Try it in one minute (judges)
 
 1. Open the app and click **Open the big screen** (the demo party) on your laptop.
 2. On your phone, click **Spray at the demo party** (or scan the QR on the big screen).
-3. Type your name, tap **₦100**, connect a WizardConnect wallet (Paytaca, Cashonize or Selene) and approve.
+3. Type your name, tap **$1**, connect a WizardConnect wallet (Paytaca, Cashonize or Selene) and approve.
 4. Watch the notes rain on the big screen with your name, and your spray appear on the leaderboard.
 
-Every spray is a real BCH mainnet transaction. ₦100 costs a few US cents.
+Every spray is a real BCH mainnet transaction; the network fee is a fraction of a cent.
 
 ## Features
 
 - **Any currency:** parties can be priced in NGN, USD, EUR, GBP, KES, GHS, ZAR or CAD; guests pay in BCH at the live rate.
 - **Host setup:** celebrant name + BCH address (or "Use my wallet" via WizardConnect) → a party link. No sign-up, no server, no database: the party lives in the URL.
-- **Guest spray page (mobile):** one-tap amounts from ₦100 to ₦5,000, priced live in BCH; WizardConnect pairing persists, so repeat sprays are one tap + approve.
+- **Guest spray page (mobile):** one-tap amounts in the party's currency, priced live in BCH; WizardConnect pairing persists, so repeat sprays are one tap + approve.
 - **Big screen:** QR to spray, live naira total, falling notes, name shout-outs, top-sprayers leaderboard, live feed with explorer links, optional sound.
 - **Stream overlay:** transparent page for OBS so streamers' viewers can spray them live.
 

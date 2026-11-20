@@ -15,10 +15,10 @@ export const FEE_BPS = 100;
 /** A standing party anyone (including the judges) can spray at. */
 export const DEMO_SESSION: Session = {
   id: "blaze26",
-  title: "BLAZE 2026 Demo Owambe",
+  title: "BLAZE 2026 Demo Party",
   celebrant: "Caleb",
   address: "bitcoincash:qqjc40pdyklz6hwf8zvf97zceqz6w6h8m5v75wqjsf",
-  currency: "NGN",
+  currency: "USD",
 };
 
 export const EXPLORER_TX = "https://blockchair.com/bitcoin-cash/transaction/";

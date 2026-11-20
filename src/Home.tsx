@@ -1,4 +1,5 @@
 import { DEMO_SESSION } from "./config";
+import { CURRENCIES } from "./currency";
 import { guestUrl, screenUrl } from "./session";
 
 const HERO_NOTES = Array.from({ length: 14 }, (_, i) => ({
@@ -6,11 +7,11 @@ const HERO_NOTES = Array.from({ length: 14 }, (_, i) => ({
   delay: (i * 0.53) % 4.2,
   dur: 4.2 + ((i * 0.7) % 2.4),
   tier: i % 6,
-  label: ["₦500", "$5", "₦1,000", "£2", "₦200", "€10"][i % 6],
+  label: ["$5", "€10", "₦1,000", "£5", "$20", "KSh 500"][i % 6],
 }));
 
 const USES = [
-  { icon: "💍", title: "Weddings & owambes", text: "Put the QR on the projector and let the aunties and uncles spray the couple without a single note on the floor." },
+  { icon: "💍", title: "Weddings & celebrations", text: "Put the QR on the projector for the money dance. Guests spray the couple from their phones, with no cash on the dance floor." },
   { icon: "🎥", title: "Live streams", text: "Add the transparent overlay to OBS. Viewers spray you live and the notes rain over your video, with their names." },
   { icon: "🎤", title: "Gigs & DJ sets", text: "Crowds have always sprayed the performer. Now the money lands in the artist's wallet instead of a sack." },
   { icon: "🎂", title: "Birthdays & milestones", text: "Graduations, naming ceremonies, send-forths: share the link in the group chat so friends abroad can spray too." },
@@ -80,25 +81,25 @@ export function Home() {
                 </div>
               ))}
             </div>
-            <p className="mock-eyebrow">Ada weds Tunde</p>
-            <p className="mock-title">Spray Ada!</p>
-            <p className="mock-total">₦482,500</p>
-            <div className="mock-shout"><b>Uncle Tayo</b> sprayed <b>₦5,000</b></div>
+            <p className="mock-eyebrow">Maya &amp; Leo's wedding</p>
+            <p className="mock-title">Spray Maya!</p>
+            <p className="mock-total">$4,825</p>
+            <div className="mock-shout"><b>Marcus</b> sprayed <b>$50</b></div>
             <ol className="mock-board">
-              <li><span>👑</span> Uncle Tayo <b>₦85,000</b></li>
-              <li><span>2</span> Chioma <b>₦62,000</b></li>
-              <li><span>3</span> Femi <b>₦41,500</b></li>
+              <li><span>👑</span> Marcus <b>$850</b></li>
+              <li><span>2</span> Chioma <b>$620</b></li>
+              <li><span>3</span> Lena <b>$415</b></li>
             </ol>
           </div>
           <div className="mock-phone">
-            <p className="mock-eyebrow">Ada weds Tunde</p>
-            <p className="mock-phone-title">Spray <span>Ada</span></p>
+            <p className="mock-eyebrow">Maya &amp; Leo</p>
+            <p className="mock-phone-title">Spray <span>Maya</span></p>
             <div className="mock-amounts">
-              {["₦200", "₦500", "₦1,000", "₦5,000"].map((a) => (
+              {["$5", "$10", "$20", "$50"].map((a) => (
                 <span key={a}>{a}</span>
               ))}
             </div>
-            <p className="mock-ok">You sprayed ₦1,000 🎉</p>
+            <p className="mock-ok">You sprayed $20 🎉</p>
           </div>
         </div>
       </section>
@@ -146,22 +147,35 @@ export function Home() {
         </div>
       </section>
 
-      <section className="origin">
-        <div className="origin-copy">
-          <p className="eyebrow">Born at the Nigerian owambe</p>
-          <h2>Spraying is a celebration. In Nigeria it's now also a crime.</h2>
-          <p>
-            Section 21 of the CBN Act makes spraying naira notes punishable by at least six months in prison or a ₦50,000
-            fine, and the EFCC has prosecuted it at weddings and parties since 2024. The tradition isn't going anywhere,
-            so Spray keeps the joy and moves the money on-chain.
-          </p>
-          <p>The same ritual lives on in tipping, busking and live streams around the world. Spray works for all of them.</p>
-        </div>
-        <div className="origin-card">
-          <p className="quote">"No naira on the floor. No EFCC in the crowd. Just a QR code on the screen."</p>
-          <div className="origin-facts">
-            <div><b>6 months</b><span>minimum jail term for spraying naira</span></div>
-            <div><b>₦50,000</b><span>minimum fine</span></div>
+      <section className="block world">
+        <p className="eyebrow">One ritual, many stages</p>
+        <h2 className="block-title">People have always showered the ones they celebrate</h2>
+        <div className="origin">
+          <div className="origin-copy">
+            <p className="world-lede">
+              The money dance at a wedding. Notes pinned to a birthday outfit. Coins in a busker's case. A tip alert on a
+              live stream. Spray takes that moment on-chain in the local currency, so anyone, anywhere, can join in from
+              their phone.
+            </p>
+            <div className="currency-chips">
+              {CURRENCIES.map((c) => (
+                <span key={c.code} title={c.name}>
+                  <b>{c.symbol}</b> {c.code}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="origin-card">
+            <p className="spotlight">Spotlight · Nigeria</p>
+            <p className="quote">Where spraying cash at parties is now a crime.</p>
+            <p className="spot-copy">
+              Section 21 of the CBN Act makes spraying naira notes an offence, and the EFCC has prosecuted it at weddings
+              and parties since 2024. Spray keeps the tradition and takes the cash off the floor.
+            </p>
+            <div className="origin-facts">
+              <div><b>6 months</b><span>minimum jail term</span></div>
+              <div><b>₦50,000</b><span>minimum fine</span></div>
+            </div>
           </div>
         </div>
       </section>

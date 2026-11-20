@@ -87,7 +87,7 @@ export function Guest({ session, wallet }: { session: Session; wallet: Wallet })
 
       <label className="name-field">
         Your name on the big screen
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Uncle Tayo" maxLength={40} />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sam" maxLength={40} />
       </label>
 
       <div className="amounts">

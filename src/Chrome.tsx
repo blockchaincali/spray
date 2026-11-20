@@ -19,10 +19,23 @@ export function goToSection(id: string) {
   }
 }
 
+/** Spray's mark: notes falling into a gold tile. */
+export function LogoMark({ size = 36 }: { size?: number }) {
+  return (
+    <svg className="logo-mark" width={size} height={size} viewBox="0 0 40 40" aria-hidden>
+      <rect width="40" height="40" rx="12" fill="#f4b41a" />
+      <rect x="7" y="8" width="14" height="8" rx="2" transform="rotate(-18 14 12)" fill="#170a26" />
+      <rect x="19" y="15" width="14" height="8" rx="2" transform="rotate(14 26 19)" fill="#170a26" opacity=".8" />
+      <rect x="10" y="24" width="14" height="8" rx="2" transform="rotate(-8 17 28)" fill="#170a26" opacity=".6" />
+    </svg>
+  );
+}
+
 export function Logo() {
   return (
     <a className="logo" href="#/" aria-label="Spray home">
-      <span className="logo-mark">₦</span>Spray
+      <LogoMark />
+      Spray
     </a>
   );
 }
@@ -95,7 +108,7 @@ export function Footer() {
           <h4>Builder</h4>
           <a href="https://x.com/0xgeneralll" target="_blank" rel="noreferrer">X · @0xgeneralll</a>
           <a href="https://github.com/blockchaincali" target="_blank" rel="noreferrer">GitHub · blockchaincali</a>
-          <span>Lagos, Nigeria</span>
+          <span>Built in Lagos, for everywhere</span>
         </div>
       </div>
       <div className="footer-base">
