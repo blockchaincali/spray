@@ -2,7 +2,7 @@ import type { Session } from "./session";
 
 /** Links shown in the BLAZE banner. */
 export const PROJECT = {
-  presentationUrl: "https://docs.google.com/presentation/d/REPLACE_WITH_WIDGET_FACTORY_DECK",
+  presentationUrl: "https://github.com/blockchaincali/spray/blob/main/docs/Spray-BLAZE-2026.pdf",
   repoUrl: "https://github.com/blockchaincali/spray",
   // CashTokens-aware address that receives EMBER2026 community votes.
   donationAddress: "bitcoincash:zqjc40pdyklz6hwf8zvf97zceqz6w6h8m5t58sw506",

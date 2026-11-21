@@ -1,6 +1,6 @@
 # Spray: make it rain, on-chain
 
-**Live app:** https://spray-bch.vercel.app · **Built for BCH BLAZE 2026**
+**Live app:** https://spray-bch.vercel.app · **Built for BCH BLAZE 2026** · [Presentation (Widget Factory)](docs/Spray-BLAZE-2026.pdf)
 
 **Spray lets a whole crowd shower someone with money, live.** Guests scan one QR code, tap an amount in the party's currency, and notes rain across the big screen while the money lands in the celebrant's Bitcoin Cash wallet within seconds.
 
