@@ -7,6 +7,9 @@ import { Home } from "./Home";
 import { Host } from "./Host";
 import { Overlay } from "./Overlay";
 import { Screen } from "./Screen";
+import { NairaGuest } from "./naira/NairaGuest";
+import { NairaHostCreate, NairaHostDashboard } from "./naira/NairaHost";
+import { NairaOverlay, NairaScreen } from "./naira/NairaScreens";
 import { decodeSession } from "./session";
 import { useWallet } from "./useWallet";
 
@@ -26,6 +29,24 @@ function useHash() {
 export default function App() {
   const hash = useHash();
   const wallet = useWallet();
+  // Naira (bank transfer) parties live on the server: #/n/<view>/<partyId>
+  const [, nView, nId] = hash.match(/^#\/n\/(\w+)\/?([\w-]*)$/) ?? [];
+  if (nView === "o" && nId) return <NairaOverlay partyId={nId} />;
+  if (nView) {
+    let nPage;
+    if (nView === "s" && nId) nPage = <NairaScreen partyId={nId} />;
+    else if (nView === "g" && nId) nPage = <NairaGuest partyId={nId} />;
+    else if (nView === "h" && nId) nPage = <NairaHostDashboard partyId={nId} />;
+    else nPage = <NairaHostCreate />;
+    return (
+      <div className={`app page-${nView === "s" ? "s" : "n"}`}>
+        {nView !== "s" && <Nav />}
+        {nPage}
+        {nView !== "s" && nView !== "g" && <Footer />}
+      </div>
+    );
+  }
+
   const [, kind, token] = hash.match(/^#\/(\w+)\/?(.*)$/) ?? [];
   const session = token ? decodeSession(token) : null;
 

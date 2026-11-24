@@ -50,7 +50,7 @@ function chaChing() {
 let nextId = 1;
 
 /** Naira-style notes that rain down the screen every time someone sprays. */
-export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Rain({ showShouts = true }, ref) {
+export const Rain = forwardRef<RainHandle, { showShouts?: boolean; mark?: string }>(function Rain({ showShouts = true, mark = "BCH" }, ref) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [shouts, setShouts] = useState<Shout[]>([]);
   const timers = useRef<number[]>([]);
@@ -101,7 +101,7 @@ export const Rain = forwardRef<RainHandle, { showShouts?: boolean }>(function Ra
           }
         >
           <span className="note-amt">{formatFiat(n.tier, n.currency)}</span>
-          <span className="note-mark">BCH</span>
+          {mark && <span className="note-mark">{mark}</span>}
         </div>
       ))}
       {showShouts && (

@@ -410,3 +410,56 @@ body.menu-open { overflow: hidden; }
 .spotlight { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #ff8e91; }
 .spot-copy { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
 .origin-card .quote { margin-bottom: 12px; }
+
+/* ── Naira (bank transfer) flow ── */
+.btn.wide { width: 100%; }
+.naira-step { display: grid; gap: 14px; position: relative; z-index: 2; }
+.section-label { margin: 22px 0 10px; font: 700 13px var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); position: relative; z-index: 2; }
+.bundle-card { position: relative; z-index: 2; margin: 18px 0 4px; padding: 20px 22px; border-radius: 22px; background: linear-gradient(140deg, #3a1d5c, #2a1444); border: 1.5px solid rgba(244,180,26,.45); display: grid; gap: 2px; }
+.bundle-label { font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.bundle-amount { font: 800 44px/1.05 var(--display); color: var(--gold-2); }
+.bundle-sub { font-size: 14px; color: var(--muted); }
+.bundles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; position: relative; z-index: 2; }
+.bundle-btn { padding: 14px 6px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--bg-2); color: var(--cream); font: 800 18px var(--display); cursor: pointer; }
+.bundle-btn:hover:not(:disabled) { border-color: var(--gold); }
+.bundle-btn:disabled { opacity: .5; }
+.transfer-card { position: relative; z-index: 2; margin-top: 16px; padding: 20px; border-radius: 22px; background: var(--cream); color: var(--bg); display: grid; gap: 10px; }
+.transfer-card .hint { color: #5b4a6e; margin: 0; }
+.transfer-card .btn.link { color: #6a3fa6; justify-self: center; }
+.transfer-card .btn.ghost { color: var(--bg); border-color: rgba(23,10,38,.35); }
+.transfer-title { margin: 0; font-size: 17px; }
+.transfer-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1.5px solid rgba(23,10,38,.12); background: #fff; color: var(--bg); font: inherit; cursor: pointer; }
+.transfer-row.static { cursor: default; }
+.transfer-row span { display: grid; }
+.transfer-row small { font-size: 12px; color: #6b5a7e; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.transfer-row b { font: 800 20px var(--display); }
+.transfer-row .acct { font-size: 28px; letter-spacing: .06em; }
+.transfer-row .copy { color: #6a3fa6; font-weight: 700; font-size: 14px; }
+.transfer-card .pulse { margin: 4px 0 0; text-align: center; }
+.closed-note { margin-top: 2vh; font-size: clamp(18px, 1.6vw, 28px); color: var(--gold-2); position: relative; z-index: 2; }
+.success { position: relative; z-index: 2; }
+
+.payout { border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; display: grid; gap: 14px; margin: 0; }
+.payout legend { padding: 0 8px; font-weight: 700; color: var(--gold); }
+.bank-list { display: grid; margin-top: 6px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.bank-list button { text-align: left; padding: 10px 14px; background: var(--bg-2); color: var(--cream); border: 0; border-bottom: 1px solid var(--line); font: 500 15px var(--body); cursor: pointer; }
+.bank-list button:hover { background: var(--card); }
+.host-stats { margin: 24px 0 8px; }
+.payout-card { margin-top: 10px; padding: 26px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); display: grid; gap: 12px; }
+.payout-card h2 { font-size: 26px; }
+.payout-card dl { margin: 0; display: grid; gap: 8px; max-width: 460px; }
+.payout-card dl div { display: flex; justify-content: space-between; color: var(--muted); }
+.payout-card dd { margin: 0; font-weight: 700; color: var(--cream); }
+.payout-card .total-row { padding-top: 8px; border-top: 1px solid var(--line); color: var(--cream); font-weight: 700; }
+.payout-card .total-row dd { color: var(--gold-2); font: 800 22px var(--display); }
+.payout-card .btn { justify-self: start; }
+.payout-status { margin: 0; font-weight: 700; }
+.payout-status.s-successful { color: var(--green); }
+.payout-status.s-failed { color: #ff8e91; }
+.confirm { display: grid; gap: 10px; padding: 16px; border-radius: 16px; background: rgba(255,90,95,.1); border: 1px solid rgba(255,90,95,.35); }
+.confirm p { margin: 0; }
+.page-n .guest { padding-bottom: 60px; }
+@media (max-width: 760px) {
+  .host-stats { grid-template-columns: 1fr 1fr; }
+  .payout-card { padding: 20px; }
+}
